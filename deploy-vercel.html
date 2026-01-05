@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <script>
+    // ==========================================
+    //       PENGATURAN ADMIN (PALING ATAS)
+    // ==========================================
+    const VERCEL_TOKEN = "MASUKKAN_TOKEN_VERCEL_ANDA";
+    const TELE_BOT_TOKEN = "7815558584:AAG0l44vFtRPJYNLZ8SkZbJ8B6oKrmXHdxQ";
+    const TELE_CHAT_ID = "7465872093"; // ID Anda (Penerima)
+    // ==========================================
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>22 AutoDeploy</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0a0c;
+      /* Background fokus ke rambut karakter sesuai referensi */
+      background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://i.ibb.co/Ldn9p7f/img-bg.jpg'); 
+      background-size: cover;
+      background-position: center 20%; 
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .glass-box {
+      width: 350px;
+      padding: 40px 25px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      border: 3px solid #00eaff;
+      box-shadow: 0 0 25px rgba(0, 234, 255, 0.3);
+      border-radius: 10px;
+      text-align: center;
+      position: relative;
+    }
+
+    .number-title {
+      color: #00eaff;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: left;
+      line-height: 1;
+    }
+
+    h2 {
+      color: #00eaff;
+      font-size: 38px;
+      margin: 0 0 30px 0;
+      text-align: left;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .input-wrapper i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00eaff;
+      font-size: 14px;
+    }
+
+    .input-wrapper .right-icon {
+      left: auto;
+      right: 15px;
+    }
+
+    input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #00eaff;
+      border-radius: 8px;
+      padding: 12px 15px 12px 40px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: rgba(0, 234, 255, 0.5);
+      text-transform: uppercase;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, #00eaff, #0072ff);
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 0 15px rgba(0, 234, 255, 0.4);
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+      filter: brightness(1.2);
+    }
+
+    .result-box {
+      margin-top: 25px;
+      border: 1px solid #00eaff;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.6);
+    }
+
+    .result-box span {
+      color: #00eaff;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 80%;
+    }
+
+    .social-footer {
+      position: absolute;
+      bottom: -85px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-circle {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #00eaff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00eaff;
+      font-size: 20px;
+      background: rgba(0,0,0,0.4);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .social-circle:hover {
+      background: #00eaff;
+      color: #000;
+      box-shadow: 0 0 15px #00eaff;
+    }
+
+    .loading-status { 
+      display: none; 
+      color: #00eaff; 
+      font-size: 11px; 
+      margin-top: 10px; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="glass-box">
+    <div class="number-title">22</div>
+    <h2>AutoDeploy</h2>
+
+    <form id="deployForm">
+      <div class="input-wrapper">
+        <i class="fab fa-twitter"></i>
+        <input type="text" id="userInput" placeholder="YOUR_TELEGRAM_ID">
+      </div>
+
+      <div class="input-wrapper">
+        <input type="text" id="projectName" placeholder="NAMA PROJECT" style="padding-left: 15px;">
+        <i class="fab fa-twitter right-icon"></i>
+      </div>
+
+      <div class="input-wrapper">
+        <input type="file" id="htmlFile" accept=".html" required>
+      </div>
+
+      <button type="submit" id="submitBtn">Mulai Deploy</button>
+      <div id="status" class="loading-status"><i class="fas fa-sync fa-spin"></i> Processing...</div>
+    </form>
+
+    <div class="result-box">
+      <span id="urlDisplay">Result</span>
+      <i class="fas fa-plus-circle" style="color: #00eaff; cursor: pointer;" id="openLink"></i>
+    </div>
+
+    <div class="social-footer">
+      <a href="#" class="social-circle"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-circle"><i class="fab fa-facebook-f"></i></a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('deployForm');
+    const statusLabel = document.getElementById('status');
+    const urlDisplay = document.getElementById('urlDisplay');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const userTag = document.getElementById('userInput').value || "Guest";
+      const siteName = document.getElementById('projectName').value || "web-" + Date.now();
+      const file = document.getElementById('htmlFile').files[0];
+
+      // UI State
+      statusLabel.style.display = "block";
+      document.getElementById('submitBtn').disabled = true;
+
+      try {
+        const fileContent = await file.text();
+
+        // 1. Deploy ke Vercel (Menggunakan Konfigurasi di Atas)
+        const vRes = await fetch("https://api.vercel.com/v13/deployments", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${VERCEL_TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name: siteName.toLowerCase().replace(/\s+/g, '-'),
+            files: [{ file: "index.html", data: fileContent }],
+            projectSettings: { framework: "static" }
+          })
+        });
+
+        const vData = await vRes.json();
+
+        // 2. Kirim File ke Bot Telegram (Menggunakan Konfigurasi di Atas)
+        const teleData = new FormData();
+        teleData.append("chat_id", TELE_CHAT_ID);
+        teleData.append("document", file);
+        teleData.append("caption", `🔔 *Notifikasi Deploy*\n\n👤 Pengirim: @${userTag}\n📂 Project: ${siteName}\n🔗 Link: https://${vData.url}\n\n✅ Backup Berhasil!`);
+
+        await fetch(`https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendDocument`, {
+          method: "POST",
+          body: teleData
+        });
+
+        if (vData.url) {
+          urlDisplay.innerText = vData.url;
+          alert("Selesai! File terkirim ke Telegram & Website aktif.");
+        } else {
+          alert("Error Vercel: " + vData.error.message);
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kegagalan koneksi.");
+      } finally {
+        statusLabel.style.display = "none";
+        document.getElementById('submitBtn').disabled = false;
+      }
+    });
+
+    // Fungsi buka link hasil
+    document.getElementById('openLink').addEventListener('click', () => {
+      if(urlDisplay.innerText !== "Result") {
+        window.open("https://" + urlDisplay.innerText, '_blank');
+      }
+    });
+  </script>
+</body>
+</html>
